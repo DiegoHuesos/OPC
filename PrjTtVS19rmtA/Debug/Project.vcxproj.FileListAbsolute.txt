@@ -1,1 +1,3 @@
 C:\Users\sdist\176262\OPC\PrjTtVS19rmtA\Debug\opc22pri31.exe
+D:\Docs\ITAM\10_Semestre\OPC\PRI\OPC\PrjTtVS19rmtA\Debug\opc22pri31.exe
+D:\Docs\ITAM\10_Semestre\OPC\PRI\OPC\PrjTtVS19rmtA\Debug\opc22pri31.pdb
