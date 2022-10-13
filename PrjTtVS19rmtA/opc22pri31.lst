@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Microsoft (R) Macro Assembler Version 14.28.29337.0	    10/13/22 07:23:42
 *MASM Template	(slides6y7.asm)				     Page 1 - 1
 
@@ -7,6 +8,18 @@ Microsoft (R) Macro Assembler Version 14.28.29337.0	    10/13/22 07:23:42
 				; Descripcion:
 				; BDslides6y7
 
+=======
+Microsoft (R) Macro Assembler Version 14.29.30038.1	    10/06/22 08:56:29
+	ejerBB03					     Page 1 - 1
+
+
+				TITLE ejerBB03a
+
+				; Uso de instrucciones, DumpMem, 
+				;     directivas data y operadores, y símbolos.
+
+				; Irvine Library procedures and functions
+>>>>>>> 91ab476b4c6257be1457a771ffb61d16018d9b8c
 				INCLUDE Irvine32.inc
 			      C ; Include file for Irvine32.lib             (Irvine32.inc)
 			      C 
@@ -26,6 +39,7 @@ Microsoft (R) Macro Assembler Version 14.28.29337.0	    10/13/22 07:23:42
 			      C .LIST
 			      C 
 
+<<<<<<< HEAD
  00000000			.CODE
 				; Procedimiento principal
  00000000			main PROC
@@ -55,11 +69,56 @@ Microsoft (R) Macro Assembler Version 14.28.29337.0	    10/13/22 07:23:42
 
  00000041			main ENDP
 				; Termina el procedimiento principal
+=======
+				; SÍMBOLOS
+ = 0000000D			miCr = 0Dh	; Carriage return symbol
+ = 0000000A			miLf = 0Ah	; Line feed symbol
 
-				; Termina el area de Ensamble
+ 00000000			.DATA
+ 00000000 00000002		rever1  DWORD 2, 11h, 18
+	   00000011
+	   00000012
+				    ; falta ...
+ 0000000C 0D 0A 43 6F 6E	txtr1	BYTE miCr, miLf, "Contenido de rever1: ", 0
+	   74 65 6E 69 64
+	   6F 20 64 65 20
+	   72 65 76 65 72
+	   31 3A 20 00
+ 00000024 0D 0A 41 44 49	adios   BYTE miCr, miLf, "ADIOS.", miCr, miLf, 0
+	   4F 53 2E 0D 0A
+	   00
+
+ 00000000			.CODE
+ 00000000			main PROC
+					; Imprimir el contenido de la lista rever1	
+ 00000000  BA 0000000C R		mov EDX, OFFSET txtr1
+ 00000005  E8 00000000 E		call WriteString
+ 0000000A  BE 00000000 R		mov ESI, OFFSET rever1
+
+					; Desplegar con DumpMem, pasandole el valor a los argumentos
+					;    con las directivas operador
+ 0000000F  BE 00000000 R		mov ESI, OFFSET rever1
+ 00000014  B9 00000003			mov ECX, LENGTHOF rever1
+ 00000019  BB 00000004			mov EBX, TYPE rever1
+
+ 0000001E  E8 00000000 E		call DumpMem
+
+ 00000023  BA 00000024 R		mov EDX, OFFSET adios
+ 00000028  E8 00000000 E		call WriteString
+					exit
+ 0000002D  6A 00	   *	    push   +000000000h
+ 0000002F  E8 00000000 E   *	    call   ExitProcess
+ 00000034			main ENDP
+>>>>>>> 91ab476b4c6257be1457a771ffb61d16018d9b8c
+
 				END main
+<<<<<<< HEAD
 Microsoft (R) Macro Assembler Version 14.28.29337.0	    10/13/22 07:23:42
 *MASM Template	(slides6y7.asm)				     Symbols 2 - 1
+=======
+Microsoft (R) Macro Assembler Version 14.29.30038.1	    10/06/22 08:56:29
+	ejerBB03					     Symbols 2 - 1
+>>>>>>> 91ab476b4c6257be1457a771ffb61d16018d9b8c
 
 
 
@@ -152,8 +211,13 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
+<<<<<<< HEAD
 _DATA  . . . . . . . . . . . . .	32 Bit	 00000000 Para	  Public  'DATA'	
 _TEXT  . . . . . . . . . . . . .	32 Bit	 00000041 Para	  Public  'CODE'	
+=======
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000002F Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000034 Para	  Public  'CODE'	
+>>>>>>> 91ab476b4c6257be1457a771ffb61d16018d9b8c
 
 
 Procedures, parameters, and locals:
@@ -260,7 +324,11 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+<<<<<<< HEAD
 main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000041 Public STDCALL
+=======
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000034 Public STDCALL
+>>>>>>> 91ab476b4c6257be1457a771ffb61d16018d9b8c
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -479,6 +547,7 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
+adios  . . . . . . . . . . . . .	Byte	 00000024 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
@@ -493,7 +562,11 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
+miCr . . . . . . . . . . . . . .	Number	 0000000Dh   
+miLf . . . . . . . . . . . . . .	Number	 0000000Ah   
 red  . . . . . . . . . . . . . .	Number	 00000004h   
+rever1 . . . . . . . . . . . . .	DWord	 00000000 _DATA	
+txtr1  . . . . . . . . . . . . .	Byte	 0000000C _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   

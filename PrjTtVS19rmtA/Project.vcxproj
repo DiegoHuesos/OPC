@@ -11,7 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <MASM Include="..\..\..\clsBD\slides6y7.asm" />
+=======
+    <MASM Include="..\asmFilesa\ejerBB03a.asm" />
+>>>>>>> 91ab476b4c6257be1457a771ffb61d16018d9b8c
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4164AA65-1EF9-4E69-899B-D1BED776070B}</ProjectGuid>
