@@ -1,25 +1,12 @@
-<<<<<<< HEAD
-Microsoft (R) Macro Assembler Version 14.28.29337.0	    10/13/22 07:23:42
-*MASM Template	(slides6y7.asm)				     Page 1 - 1
+Microsoft (R) Macro Assembler Version 14.28.29337.0	    10/18/22 08:48:15
+Ejercicio 1tradejemIF-The				     Page 1 - 1
 
 
-				TITLE *MASM Template	(slides6y7.asm)*
+				TITLE Ejercicio 1tradejemIF-Then
 
 				; Descripcion:
-				; BDslides6y7
+				; Ejemplo de implementacion de Estructuras Algoritmicas.
 
-=======
-Microsoft (R) Macro Assembler Version 14.29.30038.1	    10/06/22 08:56:29
-	ejerBB03					     Page 1 - 1
-
-
-				TITLE ejerBB03a
-
-				; Uso de instrucciones, DumpMem, 
-				;     directivas data y operadores, y símbolos.
-
-				; Irvine Library procedures and functions
->>>>>>> 91ab476b4c6257be1457a771ffb61d16018d9b8c
 				INCLUDE Irvine32.inc
 			      C ; Include file for Irvine32.lib             (Irvine32.inc)
 			      C 
@@ -39,86 +26,74 @@ Microsoft (R) Macro Assembler Version 14.29.30038.1	    10/06/22 08:56:29
 			      C .LIST
 			      C 
 
-<<<<<<< HEAD
- 00000000			.CODE
-				; Procedimiento principal
- 00000000			main PROC
-				    ; Your turn ... 1
- 00000000  B8 00000000		    MOV EAX, 0
- 00000005  BB 00000000		    MOV EBX, 0
- 0000000A  BA 00000000		    MOV EDX, 0
-
- 0000000F  66| B8 1234		    MOV AX,1234h
- 00000013  66| BB 0100		    MOV BX,100h
- 00000017  66| F7 E3		    MUL BX
- 0000001A  E8 00000000 E	    call DumpRegs
- 0000001F  E8 00000000 E	    call CrLf
-				    
-				    ; ++++++++
-				    ; Your turn ... 2
-
- 00000024  B8 00128765		    MOV EAX,00128765h
- 00000029  B9 00010000		    MOV ECX,10000h
- 0000002E  F7 E1		    MUL ECX
- 00000030  E8 00000000 E	    call DumpRegs
- 00000035  E8 00000000 E	    call CrLf
-				    
-				    exit
- 0000003A  6A 00	   *	    push   +000000000h
- 0000003C  E8 00000000 E   *	    call   ExitProcess
-
- 00000041			main ENDP
-				; Termina el procedimiento principal
-=======
-				; SÍMBOLOS
- = 0000000D			miCr = 0Dh	; Carriage return symbol
- = 0000000A			miLf = 0Ah	; Line feed symbol
-
  00000000			.DATA
- 00000000 00000002		rever1  DWORD 2, 11h, 18
-	   00000011
-	   00000012
-				    ; falta ...
- 0000000C 0D 0A 43 6F 6E	txtr1	BYTE miCr, miLf, "Contenido de rever1: ", 0
-	   74 65 6E 69 64
-	   6F 20 64 65 20
-	   72 65 76 65 72
-	   31 3A 20 00
- 00000024 0D 0A 41 44 49	adios   BYTE miCr, miLf, "ADIOS.", miCr, miLf, 0
+				; Textos para la Consola
+ = 0000000D			mcr=0Dh
+ = 0000000A			mlf=0Ah
+ = 00000000			mnul=0h
+ 00000000 0D 0A 54 72 61	titulo BYTE mcr, mlf, "Traduccion de Estructuras algoritmicas.", mcr, mlf, mnul
+	   64 75 63 63 69
+	   6F 6E 20 64 65
+	   20 45 73 74 72
+	   75 63 74 75 72
+	   61 73 20 61 6C
+	   67 6F 72 69 74
+	   6D 69 63 61 73
+	   2E 0D 0A 00
+ 0000002C 49 46 2D 54 48	prompt01 BYTE "IF-THEN sin signo.", mnul
+	   45 4E 20 73 69
+	   6E 20 73 69 67
+	   6E 6F 2E 00
+ 0000003F 0D 0A 41 44 49	prompt05 BYTE mcr, mlf, "ADIOS.", mcr, mlf, mnul
 	   4F 53 2E 0D 0A
 	   00
 
+				; Variables
+ 0000004A 00000005		cinco  DWORD 5   ; 5, luego 7
+ 0000004E 00000003		seis   DWORD 3
+				 
  00000000			.CODE
+				; Procedimiento principal
  00000000			main PROC
-					; Imprimir el contenido de la lista rever1	
- 00000000  BA 0000000C R		mov EDX, OFFSET txtr1
+ 00000000  BA 00000000 R		mov edx,OFFSET titulo
  00000005  E8 00000000 E		call WriteString
- 0000000A  BE 00000000 R		mov ESI, OFFSET rever1
+ 0000000A  E8 00000000 E		call Crlf
 
-					; Desplegar con DumpMem, pasandole el valor a los argumentos
-					;    con las directivas operador
- 0000000F  BE 00000000 R		mov ESI, OFFSET rever1
- 00000014  B9 00000003			mov ECX, LENGTHOF rever1
- 00000019  BB 00000004			mov EBX, TYPE rever1
+					; Texto IF-THEN cinco y seis, sin signo
+ 0000000F  BA 0000002C R		mov edx,OFFSET prompt01
+ 00000014  E8 00000000 E		call WriteString
+ 00000019  E8 00000000 E		call Crlf	
+				    
+					; if ( cinco-2 > seis ) then
+ 0000001E  A1 0000004A R		MOV eax, cinco
+ 00000023  83 E8 02			SUB eax, 2
+ 00000026  3B 05 0000004E R		CMP eax, seis
+ 0000002C  76 0A			JBE finSi1    ; <=
+ 0000002E  A1 0000004A R		    mov eax, cinco
+ 00000033  A3 0000004E R		    mov seis, eax
+ 00000038			finSi1:
+					
+ 00000038  A1 0000004E R		mov eax, seis
+ 0000003D  E8 00000000 E		call WriteInt  ; de eax
+ 00000042  E8 00000000 E		call Crlf
+ 00000047  E8 00000000 E		call Crlf
+					
+					; ADIOS
+ 0000004C  BA 0000003F R		mov edx,OFFSET prompt05
+ 00000051  E8 00000000 E		call WriteString
+ 00000056  E8 00000000 E		call Crlf
+ 0000005B  E8 00000000 E		call Crlf
+					
+				    exit
+ 00000060  6A 00	   *	    push   +000000000h
+ 00000062  E8 00000000 E   *	    call   ExitProcess
+ 00000067			main ENDP
+				; Termina el procedimiento principal
 
- 0000001E  E8 00000000 E		call DumpMem
-
- 00000023  BA 00000024 R		mov EDX, OFFSET adios
- 00000028  E8 00000000 E		call WriteString
-					exit
- 0000002D  6A 00	   *	    push   +000000000h
- 0000002F  E8 00000000 E   *	    call   ExitProcess
- 00000034			main ENDP
->>>>>>> 91ab476b4c6257be1457a771ffb61d16018d9b8c
-
+				; Termina el area de Ensamble
 				END main
-<<<<<<< HEAD
-Microsoft (R) Macro Assembler Version 14.28.29337.0	    10/13/22 07:23:42
-*MASM Template	(slides6y7.asm)				     Symbols 2 - 1
-=======
-Microsoft (R) Macro Assembler Version 14.29.30038.1	    10/06/22 08:56:29
-	ejerBB03					     Symbols 2 - 1
->>>>>>> 91ab476b4c6257be1457a771ffb61d16018d9b8c
+Microsoft (R) Macro Assembler Version 14.28.29337.0	    10/18/22 08:48:15
+Ejercicio 1tradejemIF-The				     Symbols 2 - 1
 
 
 
@@ -211,13 +186,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-<<<<<<< HEAD
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000000 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000041 Para	  Public  'CODE'	
-=======
-_DATA  . . . . . . . . . . . . .	32 Bit	 0000002F Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000034 Para	  Public  'CODE'	
->>>>>>> 91ab476b4c6257be1457a771ffb61d16018d9b8c
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000052 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000067 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -324,11 +294,8 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-<<<<<<< HEAD
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000041 Public STDCALL
-=======
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000034 Public STDCALL
->>>>>>> 91ab476b4c6257be1457a771ffb61d16018d9b8c
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000067 Public STDCALL
+  finSi1 . . . . . . . . . . . .	L Near	 00000038 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -547,10 +514,10 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
-adios  . . . . . . . . . . . . .	Byte	 00000024 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
+cinco  . . . . . . . . . . . . .	DWord	 0000004A _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
@@ -562,11 +529,14 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-miCr . . . . . . . . . . . . . .	Number	 0000000Dh   
-miLf . . . . . . . . . . . . . .	Number	 0000000Ah   
+mcr  . . . . . . . . . . . . . .	Number	 0000000Dh   
+mlf  . . . . . . . . . . . . . .	Number	 0000000Ah   
+mnul . . . . . . . . . . . . . .	Number	 00000000h   
+prompt01 . . . . . . . . . . . .	Byte	 0000002C _DATA	
+prompt05 . . . . . . . . . . . .	Byte	 0000003F _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-rever1 . . . . . . . . . . . . .	DWord	 00000000 _DATA	
-txtr1  . . . . . . . . . . . . .	Byte	 0000000C _DATA	
+seis . . . . . . . . . . . . . .	DWord	 0000004E _DATA	
+titulo . . . . . . . . . . . . .	Byte	 00000000 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
