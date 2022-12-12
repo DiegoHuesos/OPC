@@ -1,9 +1,13 @@
-Microsoft (R) Macro Assembler Version 14.28.29337.0	    10/20/22 10:08:07
-	Ejercici					     Page 1 - 1
+Microsoft (R) Macro Assembler Version 14.28.29337.0	    11/29/22 08:34:46
+(Program Template          (OpArrArg.asm		     Page 1 - 1
 
 
-				TITLE Ejercicio
+				TITLE Program Template          (OpArrArg.asm)
 
+				; Ejercicio CB
+				; Este programa llama un procedimiento con pasaje por stack.
+
+				; Irvine Library procedures and functions
 				INCLUDE Irvine32.inc
 			      C ; Include file for Irvine32.lib             (Irvine32.inc)
 			      C 
@@ -23,94 +27,162 @@ Microsoft (R) Macro Assembler Version 14.28.29337.0	    10/20/22 10:08:07
 			      C .LIST
 			      C 
 
-				;mis simbolos
- = 0000000D			mcr = 0Dh
- = 0000000A			mlf = 0Ah
- = 00000000			mnul = 00h
+				;SIMBOLOS
+ = 0000000D			mcr=0dh
+ = 0000000A			mlf=0ah
+ = 00000000			mnul=0h
 
  00000000			.DATA
- 00000000 00000000		num SDWORD ?
- 00000004 00000001		cont DWORD 1
+				; PROC main
+ 00000000 00000040		arrayi SDWORD 40h, 20h, 30h, 50h, 15h
+	   00000020
+	   00000030
+	   00000050
+	   00000015
+ 00000014 00000005		nuni DWORD LENGTHOF arrayi
+ 00000018  00000005 [		arrayr SDWORD 5 DUP(?)
+	    00000000
+	   ]
+ 0000002C 00000000		suma SDWORD ?
 
 
- 00000008 0D 0A 54 65 63	leeVal BYTE mcr, mlf, "Teclee el dato ", mnul
-	   6C 65 65 20 65
-	   6C 20 64 61 74
-	   6F 20 00
- 0000001A 3A 20 00		twoPoints BYTE ": ", mnul
- 0000001D 20 20 20 56 61	msgPos BYTE "   Valor positivo ", mcr, mlf, mnul
-	   6C 6F 72 20 70
-	   6F 73 69 74 69
-	   76 6F 20 0D 0A
+ 00000030 0D 0A 44 75 6D	txti BYTE mcr,mlf,"DumpMem de arrayi.",mnul
+	   70 4D 65 6D 20
+	   64 65 20 61 72
+	   72 61 79 69 2E
 	   00
- 00000032 20 20 20 56 61	msgNeg BYTE "   Valor negativo ", mcr, mlf, mnul
-	   6C 6F 72 20 6E
-	   65 67 61 74 69
-	   76 6F 20 0D 0A
+ 00000045 0D 0A 44 75 6D	txtr BYTE mcr,mlf,"DumpMem de arrayr.",mnul
+	   70 4D 65 6D 20
+	   64 65 20 61 72
+	   72 61 79 72 2E
 	   00
- 00000047 0D 0A 41 44 49	prompt05 BYTE mcr, mlf, "ADIOS.", mcr, mlf, mnul
-	   4F 53 2E 0D 0A
-	   00
+ 0000005A 0D 0A 53 75 6D	txts BYTE mcr,mlf,"Suma de elementos de arrayr = ",mnul
+	   61 20 64 65 20
+	   65 6C 65 6D 65
+	   6E 74 6F 73 20
+	   64 65 20 61 72
+	   72 61 79 72 20
+	   3D 20 00
+ 0000007B 0D 0A 41 44 49	adios BYTE mcr,mlf,"ADIOS.",mnul
+	   4F 53 2E 00
 
  00000000			.CODE
  00000000			main PROC
 
- 00000000  B9 00000005			mov ECX, 5  ;tope
- 00000005  BB 00000000		    mov EBX, 0  ;cero
+				    ; call sycArrdw(arrayi, nuni, arrayr)
 				    
+ 00000000  68 00000000 R	    push offset arrayi
+ 00000005  FF 35 00000014 R	    push nuni
+ 0000000B  68 00000018 R	    push offset arrayr    
+ 00000010  E8 0000007D		    call sycArrdw  ;call procedure
+ 00000015  8F 05 0000002C R	    pop suma
 
- 0000000A			    WHILE1:
- 0000000A  39 0D 00000004 R	        cmp cont, ECX
- 00000010  73 4E		        jae ENDWHILE1
+				    ; Despliega un dump de memoria de arrayi.
+ 0000001B  BA 00000030 R	    mov edx, OFFSET txti
+ 00000020  E8 00000000 E	    call WriteString
+ 00000025  BE 00000000 R	    mov ESI, OFFSET arrayi
+ 0000002A  8B 0D 00000014 R	    mov ECX, nuni
+ 00000030  BB 00000004		    mov EBX, TYPE arrayi
+ 00000035  E8 00000000 E	    call DumpMem
+ 0000003A  E8 00000000 E	    call Crlf
+
+				    ; Despliega un dump de memoria de arrayr.
+ 0000003F  BA 00000045 R	    mov edx, OFFSET txtr
+ 00000044  E8 00000000 E	    call WriteString
+ 00000049  BE 00000018 R	    mov ESI, OFFSET arrayr
+ 0000004E  8B 0D 00000014 R	    mov ECX, nuni
+ 00000054  BB 00000004		    mov EBX, TYPE arrayr
+ 00000059  E8 00000000 E	    call DumpMem
+ 0000005E  E8 00000000 E	    call Crlf
+
+				    ; Despliega la suma total
+ 00000063  BA 0000005A R	    mov EDX, OFFSET txts
+ 00000068  E8 00000000 E	    call WriteString
+ 0000006D  A1 0000002C R	    mov EAX, suma
+ 00000072  E8 00000000 E	    call WriteInt
+ 00000077  E8 00000000 E	    call CrLf
+
+				    ; Despliega adiós
+ 0000007C  BA 0000007B R	    mov edx, OFFSET adios
+ 00000081  E8 00000000 E	    call WriteString
+ 00000086  E8 00000000 E	    call Crlf
+
+				    EXIT
+ 0000008B  6A 00	   *	    push   +000000000h
+ 0000008D  E8 00000000 E   *	    call   ExitProcess
+ 00000092			main ENDP
+
+ 00000084			.DATA
+				; PROC sycArrdw, variables locales
+ 00000084 00000000		arr1d DWORD ?
+ 00000088 00000000		unidades DWORD ?
+ 0000008C 00000000		arr2d DWORD ?
+ 00000090 00000000		dirRet DWORD ?
+ 00000094 00000000		sumaLocal SDWORD ?
+
+ 00000092			.CODE
+ 00000092			sycArrdw PROC
+				; sycArrdw(arr1d, unidades, arr2d)
+				; Copia un arreglo dw en otro, restandole 30h a cada elemento del segundo arreglo,
+				; ademas suma todos los elementos del segundo arreglo.
+				; Recibe
+				;     Stack: arr1d@, unidades, arr2d@
+				; Regresa
+				;     Stack: suma de los elementos del segundo arreglo
+				; Varibles automaticas y locales
+				; arr1d, unidades, arr2d, dirRet
+
+				;   A continuación vendría el código
+
+				    ;Get values from the stack
+ 00000092  8F 05 00000090 R	    pop dirRet
+ 00000098  8F 05 0000008C R	    pop arr2d
+ 0000009E  8F 05 00000088 R	    pop unidades
+ 000000A4  8F 05 00000084 R	    pop arr1d
+				    
+				    ;Mov offsets and initialize sum in 0
+ 000000AA  8B 35 00000084 R	    mov ESI, arr1d
+ 000000B0  8B 3D 0000008C R	    mov EDI, arr2d
+ 000000B6  C7 05 00000094 R	    mov sumaLocal, 0 
+	   00000000
+
+				    ;For to iterate the arrays of the same size
+ 000000C0  BB 00000000		    mov EBX, 0 ; i=0
+				    .WHILE (EBX < unidades)
+ 000000C5  EB 16	   *	    jmp    @C0001
+ 000000C7		   *@C0002:
+
+				        ;arr2d[j] = arr1d[k]
+ 000000C7  8B 0E		        mov ECX, DWORD PTR [ESI]            ;mov ECX, arr1d[ESI * TYPE arr1d]
+ 000000C9  89 0F		        mov DWORD PTR [EDI], ECX            ;mov arr2d[EDI * 4], ECX
+
+				        ;arr2d[j] = arr2d[j] - 30
+ 000000CB  83 2F 30		        sub DWORD PTR [EDI], 30h            ;sub arr2d[EDI * 4], 30h
 				        
+				        ;sumaLocal = sumaLocal + arr2d[j]
+ 000000CE  8B 07		        mov EAX, SDWORD PTR [EDI]
+ 000000D0  01 05 00000094 R	        add sumaLocal, EAX                  ;add sumaLocal, arr2d[EDI * 4] 
+				        
+				        ;j++, k++, i++
+ 000000D6  83 C6 04		        add ESI, 4
+ 000000D9  83 C7 04		        add EDI, 4
+ 000000DC  43			        inc EBX ; i++
+				        
+				    .ENDW
+ 000000DD		   *@C0001:
+ 000000DD  3B 1D 00000088 R *	    cmp    ebx, unidades
+ 000000E3  72 E2	   *	    jb	@C0002
 
-				        ;Imprime leyenda y contador
- 00000012  BA 00000008 R	        mov EDX, OFFSET leeVal
- 00000017  E8 00000000 E	        call WriteString
- 0000001C  A1 00000004 R	        mov EAX, cont
- 00000021  E8 00000000 E	        call WriteInt
- 00000026  BA 0000001A R	        mov EDX, OFFSET twoPoints
- 0000002B  E8 00000000 E	        call WriteString
-
-				        ;Lee valor
- 00000030  E8 00000000 E	        call ReadInt
- 00000035  A3 00000000 R	        mov num, EAX
-
-				        ;Compara valor con cero
- 0000003A  39 1D 00000000 R	        cmp num, EBX
-
-				        ;Si es negativo
-				        ;IF1
- 00000040  7D 0C		        jge ELSE1
-				            ;Print negativo
- 00000042  BA 00000032 R	            mov EDX, OFFSET msgNeg
- 00000047  E8 00000000 E	            call WriteString
- 0000004C  EB 0A		            jmp ENDIF1
-				        ;ELSE1
- 0000004E			        ELSE1:
-				            ;Print positivo
- 0000004E  BA 0000001D R	            mov EDX, OFFSET msgPos
- 00000053  E8 00000000 E	            call WriteString
- 00000058			        ENDIF1:
-
- 00000058  FF 05 00000004 R	        inc cont     ;incrementa al contador
- 0000005E  EB AA		        jmp WHILE1  ;regresa al inicio del while para comparar
-
- 00000060			    ENDWHILE1:
-
-				    ;Imprime ADIOS
- 00000060  BA 00000047 R	    mov EDX, OFFSET prompt05
- 00000065  E8 00000000 E	    call WriteString
-
-				    exit
- 0000006A  6A 00	   *	    push   +000000000h
- 0000006C  E8 00000000 E   *	    call   ExitProcess
-
- 00000071			main ENDP
+				    ;Return sumaLocal
+ 000000E5  FF 35 00000094 R	    push sumaLocal
+ 000000EB  FF 35 00000090 R	    push dirRet         ;Push of next instruction offset
+					
+ 000000F1  C3			    RET
+ 000000F2			sycArrdw ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.28.29337.0	    10/20/22 10:08:07
-	Ejercici					     Symbols 2 - 1
+Microsoft (R) Macro Assembler Version 14.28.29337.0	    11/29/22 08:34:46
+(Program Template          (OpArrArg.asm		     Symbols 2 - 1
 
 
 
@@ -203,8 +275,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000052 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000071 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000098 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000F2 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -311,13 +383,10 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000071 Public STDCALL
-  WHILE1 . . . . . . . . . . . .	L Near	 0000000A _TEXT	
-  ELSE1  . . . . . . . . . . . .	L Near	 0000004E _TEXT	
-  ENDIF1 . . . . . . . . . . . .	L Near	 00000058 _TEXT	
-  ENDWHILE1  . . . . . . . . . .	L Near	 00000060 _TEXT	
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000092 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
+sycArrdw . . . . . . . . . . . .	P Near	 00000092 _TEXT	Length= 00000060 Public STDCALL
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -534,15 +603,19 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
+adios  . . . . . . . . . . . . .	Byte	 0000007B _DATA	
+arr1d  . . . . . . . . . . . . .	DWord	 00000084 _DATA	
+arr2d  . . . . . . . . . . . . .	DWord	 0000008C _DATA	
+arrayi . . . . . . . . . . . . .	DWord	 00000000 _DATA	
+arrayr . . . . . . . . . . . . .	DWord	 00000018 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
-cont . . . . . . . . . . . . . .	DWord	 00000004 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
+dirRet . . . . . . . . . . . . .	DWord	 00000090 _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
-leeVal . . . . . . . . . . . . .	Byte	 00000008 _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -553,12 +626,14 @@ magenta  . . . . . . . . . . . .	Number	 00000005h
 mcr  . . . . . . . . . . . . . .	Number	 0000000Dh   
 mlf  . . . . . . . . . . . . . .	Number	 0000000Ah   
 mnul . . . . . . . . . . . . . .	Number	 00000000h   
-msgNeg . . . . . . . . . . . . .	Byte	 00000032 _DATA	
-msgPos . . . . . . . . . . . . .	Byte	 0000001D _DATA	
-num  . . . . . . . . . . . . . .	DWord	 00000000 _DATA	
-prompt05 . . . . . . . . . . . .	Byte	 00000047 _DATA	
+nuni . . . . . . . . . . . . . .	DWord	 00000014 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-twoPoints  . . . . . . . . . . .	Byte	 0000001A _DATA	
+sumaLocal  . . . . . . . . . . .	DWord	 00000094 _DATA	
+suma . . . . . . . . . . . . . .	DWord	 0000002C _DATA	
+txti . . . . . . . . . . . . . .	Byte	 00000030 _DATA	
+txtr . . . . . . . . . . . . . .	Byte	 00000045 _DATA	
+txts . . . . . . . . . . . . . .	Byte	 0000005A _DATA	
+unidades . . . . . . . . . . . .	DWord	 00000088 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
